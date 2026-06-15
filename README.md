@@ -1,29 +1,101 @@
-Laravel + Vue Job Board — Auth & Roles scaffold
+# Laravel + Vue Job Board
 
-This workspace contains scaffolding for the Auth & Roles feature (Laravel backend + Vue 3 frontend using Vite).
+This repository contains the source code for a Job Board platform built with a Laravel (Sanctum) backend and a Vue 3 (Vite + Axios) frontend.
 
-Backend: uses Laravel Sanctum for API tokens (personal access tokens). Frontend: Vue 3 + Vite + Axios.
+## 🚀 Quick Setup
 
-Quick start (after installing PHP, Composer, Node):
+We have included an automated setup script to easily initialize the project on Windows machines.
 
-Install backend deps and run migrations:
+1. Clone the repository.
+2. Double-click the `setup.bat` file in the root directory (or run it via terminal).
+3. The script will install all dependencies for both backend and frontend, create your `.env` files, and run the database migrations and seeders.
+4. *Important: Ensure your local database matches the credentials generated in `backend/.env` before the migrations step.*
 
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan db:seed --class=RoleSeeder
-```
+**To run the application manually:**
+Open two separate terminals:
+- **Terminal 1 (Backend):** `cd backend && php artisan serve` (Runs on `http://127.0.0.1:8000`)
+- **Terminal 2 (Frontend):** `cd frontend && npm run dev`
 
-Install frontend deps and run dev server:
+---
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+## 👥 Team Task Distribution & Future Work
 
-Notes:
-- This is a scaffold for the Auth & Roles tasks assigned to Xero.
-- Review `routes/api.php`, `app/Http/Controllers/AuthController.php`, and `app/Http/Middleware/CheckRole.php`.
+Below is the planned distribution of tasks and the current status of features to be implemented across the team:
+
+### 1. Auth & Roles — @Xero (Scaffolded)
+**Backend:**
+- [x] Laravel authentication setup (Sanctum)
+- [x] Registration & login APIs
+- [x] Role system (Admin / Employer / Candidate)
+- [x] Authorization middleware (`role` middleware)
+- [x] Profile management APIs
+- [x] Route protection based on roles
+
+**Frontend:**
+- [x] Login page
+- [x] Registration page
+- [x] Profile page
+- [x] Edit profile page
+
+### 2. Jobs & Taxonomy — @khaled_waleed_ali (Future Work)
+**Backend:**
+- [ ] Categories table and APIs
+- [ ] Technologies table and APIs
+- [ ] Jobs table and model
+- [ ] Job CRUD APIs
+- [ ] Employer dashboard APIs
+- [ ] Job details endpoint
+
+**Frontend:**
+- [ ] Create Job page
+- [ ] Edit Job page
+- [ ] Employer Jobs Management page
+- [ ] Employer Dashboard
+- [ ] Job Details page (Employer view)
+
+### 3. Admin, Payments & Platform Ops — @Shaker (Future Work)
+**Backend:**
+- [ ] Admin dashboard APIs
+- [ ] Job approval/rejection workflow
+- [ ] Job status management
+- [ ] Payment integration (Stripe/PayPal)
+- [ ] Analytics endpoints
+- [ ] Comment moderation APIs
+
+**Frontend:**
+- [ ] Admin Dashboard
+- [ ] Job Approval Queue
+- [ ] Admin Job Management pages
+- [ ] Payment pages
+- [ ] Analytics views
+
+### 4. Applications & Resumes — @ziad (Future Work)
+**Backend:**
+- [ ] Application APIs
+- [ ] Apply to Job endpoint
+- [ ] Cancel Application endpoint
+- [ ] Resume upload handling
+- [ ] Application status management
+- [ ] Accept/Reject candidate endpoints
+
+**Frontend:**
+- [ ] Candidate Dashboard
+- [ ] Applications page
+- [ ] Resume upload UI
+- [ ] Apply button and application forms
+- [ ] Application status tracking pages
+
+### 5. Public Job Board & Search — @MahmoudAli (Future Work)
+**Backend:**
+- [ ] Search APIs
+- [ ] Filtering & Pagination logic
+- [ ] Sorting logic
+- [ ] Comments APIs
+
+**Frontend:**
+- [ ] Public Home Page
+- [ ] Job Listing page
+- [ ] Public Job Details page
+- [ ] Search, Filters, Pagination, and Sorting UI
+- [ ] Comments section
+- [ ] Responsive/mobile design & Candidate-facing UX improvements
