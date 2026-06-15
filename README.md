@@ -39,19 +39,19 @@ Below is the planned distribution of tasks and the current status of features to
 
 ### 2. Jobs & Taxonomy — @khaled_waleed_ali (Future Work)
 **Backend:**
-- [ ] Categories table and APIs
-- [ ] Technologies table and APIs
-- [ ] Jobs table and model
-- [ ] Job CRUD APIs
-- [ ] Employer dashboard APIs
-- [ ] Job details endpoint
+- [x] Categories table and APIs
+- [x] Technologies table and APIs
+- [x] Jobs table and model
+- [x] Job CRUD APIs
+- [x] Employer dashboard APIs
+- [x] Job details endpoint
 
 **Frontend:**
-- [ ] Create Job page
-- [ ] Edit Job page
-- [ ] Employer Jobs Management page
-- [ ] Employer Dashboard
-- [ ] Job Details page (Employer view)
+- [x] Create Job page
+- [x] Edit Job page
+- [x] Employer Jobs Management page
+- [x] Employer Dashboard
+- [x] Job Details page (Employer view)
 
 ### 3. Admin, Payments & Platform Ops — @Shaker (Future Work)
 **Backend:**

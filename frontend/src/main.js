@@ -17,6 +17,7 @@ import JobDetails from './pages/employer/JobDetails.vue'
 const routes = [
   // Existing Routes
   { path: '/', component: Login },
+  { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/profile', component: Profile },
   { path: '/profile/edit', component: EditProfile },

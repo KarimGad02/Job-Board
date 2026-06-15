@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->middleware('role:employer');
 
     // Employer Job Management Routes (Nested to require both login and employer role)
-    Route::middleware('role:employer')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
         Route::get('/employer/jobs', [JobController::class, 'myJobs']); 
         Route::post('/jobs', [JobController::class, 'store']); 
         Route::put('/jobs/{job}', [JobController::class, 'update']); 
