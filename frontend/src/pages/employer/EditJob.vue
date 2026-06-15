@@ -1,8 +1,17 @@
 <template>
   <div class="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-    <h2 class="text-2xl font-bold mb-6">Post a New Job</h2>
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Edit Job Posting</h2>
+      <router-link to="/employer/jobs" class="text-gray-500 hover:underline">
+        &larr; Back to Jobs
+      </router-link>
+    </div>
 
-    <form @submit.prevent="submitJob" class="space-y-4">
+    <div v-if="loading" class="text-center py-4 text-gray-500">
+      Loading job details...
+    </div>
+
+    <form v-else @submit.prevent="updateJob" class="space-y-4">
       <div>
         <label class="block font-medium">Job Title</label>
         <input v-model="form.title" type="text" required class="w-full border rounded p-2" />
@@ -45,11 +54,11 @@
       <div class="grid grid-cols-3 gap-4">
         <div>
           <label class="block font-medium">Salary Range</label>
-          <input v-model="form.salary_range" type="text" placeholder="e.g. $50k - $70k" class="w-full border rounded p-2" />
+          <input v-model="form.salary_range" type="text" class="w-full border rounded p-2" />
         </div>
         <div>
           <label class="block font-medium">Benefits</label>
-          <input v-model="form.benefits" type="text" placeholder="e.g. Health insurance, Gym membership, Annual bonus" class="w-full border rounded p-2" />
+          <input v-model="form.benefits" type="text" class="w-full border rounded p-2" />
         </div>
         <div>
           <label class="block font-medium">Application Deadline</label>
@@ -57,24 +66,15 @@
         </div>
       </div>
 
-      <!-- Technologies (Checkboxes) -->
-<div>
-  <label class="block font-medium mb-2">Required Technologies</label>
-  <div class="flex flex-wrap gap-4 border p-3 rounded min-h-[50px] items-center">
-    
-    <!-- Show this if the API fails to load data -->
-    <span v-if="technologies.length === 0" class="text-red-500 text-sm italic">
-      Waiting for database connection to load technologies...
-    </span>
-
-    <!-- Show checkboxes when data successfully loads -->
-    <label v-else v-for="tech in technologies" :key="tech.id" class="flex items-center space-x-2">
-      <input type="checkbox" :value="tech.id" v-model="form.technologies" />
-      <span>{{ tech.name }}</span>
-    </label>
-    
-  </div>
-</div>
+      <div>
+        <label class="block font-medium mb-2">Required Technologies</label>
+        <div class="flex flex-wrap gap-4 border p-3 rounded bg-gray-50">
+          <label v-for="tech in technologies" :key="tech.id" class="flex items-center space-x-2">
+            <input type="checkbox" :value="tech.id" v-model="form.technologies" />
+            <span>{{ tech.name }}</span>
+          </label>
+        </div>
+      </div>
 
       <div>
         <label class="block font-medium">Job Status</label>
@@ -85,8 +85,8 @@
         </select>
       </div>
 
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-        Create Job
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full font-bold">
+        Save Changes
       </button>
     </form>
   </div>
@@ -94,8 +94,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import api from '../../services/api';
 
+const route = useRoute();
+const router = useRouter();
+const jobId = route.params.id;
+
+const loading = ref(true);
 const categories = ref([]);
 const technologies = ref([]);
 
@@ -113,30 +119,51 @@ const form = ref({
   technologies: []
 });
 
-// Fetch categories and technologies when the page loads
 onMounted(async () => {
   try {
-    const [catResponse, techResponse] = await Promise.all([
+    // Fetch taxonomy and existing job data simultaneously
+    const [catRes, techRes, jobRes] = await Promise.all([
       api.get('/categories'),
-      api.get('/technologies')
+      api.get('/technologies'),
+      api.get(`/jobs/${jobId}`)
     ]);
-    categories.value = catResponse.data;
-    technologies.value = techResponse.data;
+
+    categories.value = catRes.data;
+    technologies.value = techRes.data;
+    
+    // Populate form with existing job data
+    const jobData = jobRes.data;
+    form.value = {
+      title: jobData.title,
+      category_id: jobData.category_id,
+      description: jobData.description,
+      responsibilities: jobData.responsibilities || '',
+      work_type: jobData.work_type || 'onsite',
+      location: jobData.location || '',
+      salary_range: jobData.salary_range || '',
+      benefits: jobData.benefits || '',
+      application_deadline: jobData.application_deadline || '',
+      status: jobData.status,
+      // Extract just the IDs from the attached technology objects
+      technologies: jobData.technologies.map(t => t.id)
+    };
   } catch (error) {
-    console.error('Error fetching taxonomy data:', error);
+    console.error('Error fetching job details:', error);
+    alert('Could not load job data. It may have been deleted.');
+    router.push('/employer/jobs');
+  } finally {
+    loading.value = false;
   }
 });
 
-// Submit the form
-const submitJob = async () => {
+const updateJob = async () => {
   try {
-    await api.post('/jobs', form.value);
-    alert('Job created successfully!');
-    // Here you would typically route the user back to the dashboard
-    // router.push('/employer/jobs');
+    await api.put(`/jobs/${jobId}`, form.value);
+    alert('Job updated successfully!');
+    router.push('/employer/jobs');
   } catch (error) {
-    console.error('Error creating job:', error.response?.data || error);
-    alert('Failed to create job. Check console for details.');
+    console.error('Error updating job:', error);
+    alert('Failed to update job.');
   }
 };
 </script>
