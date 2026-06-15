@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\AdminRoleController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -22,6 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->middleware('role:employer');
 
     // Admin role management
-    Route::get('admin/users', [\App\Http\Controllers\AdminRoleController::class, 'index'])->middleware('role:admin');
-    Route::put('admin/users/{id}/roles', [\App\Http\Controllers\AdminRoleController::class, 'updateRoles'])->middleware('role:admin');
+    Route::get('admin/users', [AdminRoleController::class, 'index'])->middleware('role:admin');
+    Route::put('admin/users/{id}/roles', [AdminRoleController::class, 'updateRoles'])->middleware('role:admin');
 });
