@@ -42,4 +42,8 @@ class Job extends Model
     {
         return $this->belongsToMany(Technology::class);
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -34,7 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/stats', [AdminController::class, 'stats'])->middleware('role:admin');
     Route::get('admin/jobs', [AdminController::class, 'jobs'])->middleware('role:admin');
     Route::put('admin/job/{id}', [AdminController::class, 'updateJob'])->middleware('role:admin');
-
+    Route::get('admin/comments', [AdminController::class, 'comments'])->middleware('role:admin');
+    Route::put('admin/comment/{id}', [AdminController::class, 'updateComment'])->middleware('role:admin');
 
 
 

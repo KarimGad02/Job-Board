@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Job;
 use App\Models\Role;
+use App\Models\comment;
+
 
 class AdminController extends Controller
 {
@@ -68,6 +70,28 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'Job status updated successfully.',
             'job' => $job,
+        ]);
+    }
+    public function comments(Request $request)
+    {
+        $comments = Comment::get();
+        return response()->json($comments);
+    }
+    public function updateComment(Request $request, $id)
+    {
+        $request->validate([
+        'status' => 'required|in:active,hidden',
+        ]);
+
+        $comment = Comment::findOrFail($id);
+
+        $comment->update([
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'message' => 'comment status updated successfully.',
+            'comment' => $comment,
         ]);
     }
 }

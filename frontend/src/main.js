@@ -16,6 +16,7 @@ import JobDetails from './pages/employer/JobDetails.vue'
 //-----------------------------------------------------------------
 import AdminStats from './pages/adminstats.vue'
 import AdminJobs from './pages/adminJobs.vue'
+import AdminComment from './pages/adminComment.vue'
 
 
 
@@ -37,6 +38,8 @@ const routes = [
 //---------------------------------------------------------------
   { path: '/admin/stats', component: AdminStats },
   { path: '/admin/jobs', component: AdminJobs },
+  { path: '/admin/comments', component: AdminComment },
+
 
 
 ]
