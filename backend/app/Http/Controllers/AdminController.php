@@ -48,4 +48,26 @@ class AdminController extends Controller
         'rejected_jobs' => $rejectedJobs,
         ]);
     }
+    public function jobs(Request $request)
+    {
+        $totalJobs = Job::get();
+        return response()->json( $totalJobs);
+    }
+    public function updateJob(Request $request, $id)
+    {
+        $request->validate([
+        'status' => 'required|in:draft,open,closed',
+        ]);
+
+        $job = Job::findOrFail($id);
+
+        $job->update([
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'message' => 'Job status updated successfully.',
+            'job' => $job,
+        ]);
+    }
 }

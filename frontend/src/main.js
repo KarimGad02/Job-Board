@@ -15,6 +15,8 @@ import EditJob from './pages/employer/EditJob.vue'
 import JobDetails from './pages/employer/JobDetails.vue'
 //-----------------------------------------------------------------
 import AdminStats from './pages/adminstats.vue'
+import AdminJobs from './pages/adminJobs.vue'
+
 
 
 const routes = [
@@ -34,6 +36,8 @@ const routes = [
   { path: '/employer/jobs/:id', component: JobDetails },
 //---------------------------------------------------------------
   { path: '/admin/stats', component: AdminStats },
+  { path: '/admin/jobs', component: AdminJobs },
+
 
 ]
 
