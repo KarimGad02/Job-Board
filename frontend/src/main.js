@@ -17,6 +17,7 @@ import JobDetails from './pages/employer/JobDetails.vue'
 import AdminStats from './pages/adminstats.vue'
 import AdminJobs from './pages/adminJobs.vue'
 import AdminComment from './pages/adminComment.vue'
+import Payment from './pages/payment.vue'
 
 
 
@@ -28,6 +29,8 @@ const routes = [
   { path: '/profile', component: Profile },
   { path: '/profile/edit', component: EditProfile },
   { path: '/admin', component: Admin },
+  { path: '/payment', component: Payment },
+
 
   // --- Khaled's Employer Routes ---
   { path: '/employer/dashboard', component: Dashboard },

@@ -11,6 +11,8 @@ use App\Http\Controllers\AdminRoleController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TechnologyController;
+use App\Http\Controllers\PaymentController;
+
 
 // Public Auth Routes
 Route::post('register', [AuthController::class, 'register']);
@@ -26,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('profile', [ProfileController::class, 'show']);
     Route::put('profile', [ProfileController::class, 'update']);
-
+    Route::post('/payment/create-intent', [PaymentController::class, 'createPaymentIntent']);
     // Admin-only routes
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->middleware('role:admin');
     Route::get('admin/users', [AdminRoleController::class, 'index'])->middleware('role:admin');
