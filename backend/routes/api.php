@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->middleware('role:admin');
     Route::get('admin/users', [AdminRoleController::class, 'index'])->middleware('role:admin');
     Route::put('admin/users/{id}/roles', [AdminRoleController::class, 'updateRoles'])->middleware('role:admin');
+    Route::get('admin/stats', [AdminController::class, 'stats'])->middleware('role:admin');
+
 
     // Employer-only routes
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->middleware('role:employer');

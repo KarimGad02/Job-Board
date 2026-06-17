@@ -13,6 +13,9 @@ import JobsManagement from './pages/employer/JobsManagement.vue'
 import CreateJob from './pages/employer/CreateJob.vue'
 import EditJob from './pages/employer/EditJob.vue'
 import JobDetails from './pages/employer/JobDetails.vue'
+//-----------------------------------------------------------------
+import AdminStats from './pages/adminstats.vue'
+
 
 const routes = [
   // Existing Routes
@@ -28,7 +31,10 @@ const routes = [
   { path: '/employer/jobs', component: JobsManagement },
   { path: '/employer/jobs/create', component: CreateJob },
   { path: '/employer/jobs/:id/edit', component: EditJob },
-  { path: '/employer/jobs/:id', component: JobDetails }
+  { path: '/employer/jobs/:id', component: JobDetails },
+//---------------------------------------------------------------
+  { path: '/admin/stats', component: AdminStats },
+
 ]
 
 const router = createRouter({ history: createWebHistory(), routes })

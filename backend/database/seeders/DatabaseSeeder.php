@@ -9,5 +9,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(\Database\Seeders\RoleSeeder::class);
+        $this->call(\Database\Seeders\TaxonomySeeder::class);
     }
 }
