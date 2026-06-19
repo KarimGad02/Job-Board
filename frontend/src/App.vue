@@ -6,7 +6,10 @@
         <router-link to="/">Login</router-link> | 
         <router-link to="/register">Register</router-link> | 
         <router-link to="/profile">Profile</router-link> | 
-        <router-link to="/admin">Admin</router-link>
+        <router-link to="/admin">Admin</router-link> |
+        <router-link to="/employer/jobs">Employer Jobs</router-link> |
+        <router-link to="/jobs">Find Jobs</router-link> |
+        <router-link to="/candidate/applications">My Applications</router-link>
       </nav>
     </header>
     <main>

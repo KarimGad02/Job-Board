@@ -19,6 +19,12 @@ import AdminJobs from './pages/adminJobs.vue'
 import AdminComment from './pages/adminComment.vue'
 import Payment from './pages/payment.vue'
 
+// --- Candidate Pages Imports ---
+import CandidateJobs from './pages/candidate/CandidateJobs.vue'
+import CandidateJobDetails from './pages/candidate/CandidateJobDetails.vue'
+import CandidateApplications from './pages/candidate/Applications.vue'
+import JobApplications from './pages/employer/JobApplications.vue'
+
 
 
 const routes = [
@@ -42,6 +48,14 @@ const routes = [
   { path: '/admin/stats', component: AdminStats },
   { path: '/admin/jobs', component: AdminJobs },
   { path: '/admin/comments', component: AdminComment },
+
+  // --- Candidate Application Routes ---
+  { path: '/jobs', component: CandidateJobs },
+  { path: '/jobs/:id', component: CandidateJobDetails },
+  { path: '/candidate/applications', component: CandidateApplications },
+
+  // --- Employer Application Route ---
+  { path: '/employer/jobs/:id/applications', component: JobApplications },
 
 
 

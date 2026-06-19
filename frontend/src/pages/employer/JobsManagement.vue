@@ -35,6 +35,9 @@
               </span>
             </td>
             <td class="p-4 text-right space-x-4">
+              <router-link :to="`/employer/jobs/${job.id}/applications`" class="text-green-600 hover:underline font-medium">
+                Applications
+              </router-link>
               <router-link :to="`/employer/jobs/${job.id}/edit`" class="text-blue-500 hover:underline">
                 Edit
               </router-link>

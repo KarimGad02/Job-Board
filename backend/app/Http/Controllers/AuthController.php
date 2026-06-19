@@ -14,7 +14,8 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'role' => 'nullable|string|in:candidate,employer'
         ]);
 
         $user = User::create([
@@ -23,7 +24,9 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $role = Role::firstWhere('name', 'candidate');
+        $requestedRole = $data['role'] ?? 'candidate';
+        $role = Role::firstWhere('name', $requestedRole);
+        
         if ($role) {
             $user->roles()->attach($role->id);
         }

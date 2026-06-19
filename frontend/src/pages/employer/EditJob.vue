@@ -35,6 +35,10 @@
         <label class="block font-medium">Responsibilities</label>
         <textarea v-model="form.responsibilities" rows="3" class="w-full border rounded p-2"></textarea>
       </div>
+      <div>
+        <label class="block font-medium">Required Skills & Qualifications</label>
+        <textarea v-model="form.skills_and_qualifications" rows="3" class="w-full border rounded p-2"></textarea>
+      </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
@@ -67,13 +71,8 @@
       </div>
 
       <div>
-        <label class="block font-medium mb-2">Required Technologies</label>
-        <div class="flex flex-wrap gap-4 border p-3 rounded bg-gray-50">
-          <label v-for="tech in technologies" :key="tech.id" class="flex items-center space-x-2">
-            <input type="checkbox" :value="tech.id" v-model="form.technologies" />
-            <span>{{ tech.name }}</span>
-          </label>
-        </div>
+        <label class="block font-medium">Company Logo (Optional)</label>
+        <input type="file" @change="handleFileUpload" accept="image/*" class="w-full border rounded p-2" />
       </div>
 
       <div>
@@ -103,49 +102,45 @@ const jobId = route.params.id;
 
 const loading = ref(true);
 const categories = ref([]);
-const technologies = ref([]);
 
 const form = ref({
   title: '',
   category_id: '',
   description: '',
   responsibilities: '',
+  skills_and_qualifications: '',
   work_type: 'onsite',
   location: '',
   salary_range: '',
   benefits: '',
   application_deadline: '',
   status: 'open',
-  technologies: []
+  company_logo: null
 });
 
 onMounted(async () => {
   try {
-    // Fetch taxonomy and existing job data simultaneously
-    const [catRes, techRes, jobRes] = await Promise.all([
+    const [catRes, jobRes] = await Promise.all([
       api.get('/categories'),
-      api.get('/technologies'),
       api.get(`/jobs/${jobId}`)
     ]);
 
     categories.value = catRes.data;
-    technologies.value = techRes.data;
     
-    // Populate form with existing job data
     const jobData = jobRes.data;
     form.value = {
       title: jobData.title,
       category_id: jobData.category_id,
       description: jobData.description,
       responsibilities: jobData.responsibilities || '',
+      skills_and_qualifications: jobData.skills_and_qualifications || '',
       work_type: jobData.work_type || 'onsite',
       location: jobData.location || '',
       salary_range: jobData.salary_range || '',
       benefits: jobData.benefits || '',
       application_deadline: jobData.application_deadline || '',
       status: jobData.status,
-      // Extract just the IDs from the attached technology objects
-      technologies: jobData.technologies.map(t => t.id)
+      company_logo: null
     };
   } catch (error) {
     console.error('Error fetching job details:', error);
@@ -156,9 +151,26 @@ onMounted(async () => {
   }
 });
 
+const handleFileUpload = (event) => {
+  form.value.company_logo = event.target.files[0];
+};
+
 const updateJob = async () => {
   try {
-    await api.put(`/jobs/${jobId}`, form.value);
+    const formData = new FormData();
+    for (const key in form.value) {
+      if (form.value[key] !== null && form.value[key] !== '') {
+        formData.append(key, form.value[key]);
+      }
+    }
+    // Laravel needs _method=PUT to handle multipart form data for an update
+    formData.append('_method', 'PUT');
+
+    await api.post(`/jobs/${jobId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     alert('Job updated successfully!');
     router.push('/employer/jobs');
   } catch (error) {

@@ -8,11 +8,21 @@ use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
+    // Public: Get all open jobs
+    public function index()
+    {
+        $jobs = Job::where('status', 'open')
+            ->with(['category', 'employer'])
+            ->latest()
+            ->get();
+        return response()->json($jobs);
+    }
+
     // Employer Dashboard APIs (Get jobs for logged-in employer)
     public function myJobs()
     {
         $jobs = Job::where('employer_id', Auth::id())
-                    ->with(['category', 'technologies'])
+                    ->with(['category'])
                     ->latest()
                     ->get();
                     
@@ -27,37 +37,38 @@ class JobController extends Controller
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'responsibilities' => 'nullable|string',
+        'skills_and_qualifications' => 'nullable|string',
         'salary_range' => 'nullable|string|max:255',
         'benefits' => 'nullable|string',
         'location' => 'nullable|string|max:255',
         'work_type' => 'required|in:remote,onsite,hybrid',
         'application_deadline' => 'nullable|date',
+        'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'status' => 'required|in:open,closed,draft',
-        'technologies' => 'array',
-        'technologies.*' => 'exists:technologies,id'
     ]);
 
     // 1. Manually add the IDs required by your database schema
     $validated['employer_id'] = Auth::id();
     $validated['user_id'] = Auth::id();
 
+    // Handle company logo upload
+    if ($request->hasFile('company_logo')) {
+        $path = $request->file('company_logo')->store('logos', 'public');
+        $validated['company_logo'] = $path;
+    }
+
     // 2. Create the job directly from the model
     $job = \App\Models\Job::create($validated);
 
-    // 3. Attach technologies if present
-    if ($request->has('technologies')) {
-        $job->technologies()->attach($request->technologies);
-    }
-
     return response()->json([
         'message' => 'Job created successfully', 
-        'job' => $job->load(['category', 'technologies'])
+        'job' => $job->load(['category'])
     ], 201);
 }
     // Job Details Endpoint (Employer View & Candidate View)
     public function show(Job $job)
     {
-        return response()->json($job->load(['category', 'technologies', 'employer']));
+        return response()->json($job->load(['category', 'employer']));
     }
 
     // Update Job
@@ -73,26 +84,26 @@ class JobController extends Controller
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'responsibilities' => 'nullable|string',
+            'skills_and_qualifications' => 'nullable|string',
             'salary_range' => 'nullable|string|max:255',
             'benefits' => 'nullable|string',
             'location' => 'nullable|string|max:255',
             'work_type' => 'sometimes|in:remote,onsite,hybrid',
             'application_deadline' => 'nullable|date',
-            'company_logo' => 'nullable|string',
+            'company_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'sometimes|in:open,closed,draft',
-            'technologies' => 'array',
-            'technologies.*' => 'exists:technologies,id'
         ]);
+
+        if ($request->hasFile('company_logo')) {
+            $path = $request->file('company_logo')->store('logos', 'public');
+            $validated['company_logo'] = $path;
+        }
 
         $job->update($validated);
 
-        if ($request->has('technologies')) {
-            $job->technologies()->sync($request->technologies);
-        }
-
         return response()->json([
             'message' => 'Job updated successfully', 
-            'job' => $job->load(['category', 'technologies'])
+            'job' => $job->load(['category'])
         ]);
     }
 

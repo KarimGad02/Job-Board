@@ -16,12 +16,14 @@ class Job extends Model
         'category_id', 
         'employer_id', 
         'responsibilities', 
+        'skills_and_qualifications',
         'user_id',
         'benefits', 
         'work_type', 
         'location', 
         'salary_range', 
         'application_deadline', 
+        'company_logo',
         'status'
     ];
 
@@ -45,5 +47,10 @@ class Job extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
     }
 }

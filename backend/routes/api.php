@@ -12,6 +12,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TechnologyController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ApplicationController;
 
 
 // Public Auth Routes
@@ -21,6 +22,7 @@ Route::post('login', [AuthController::class, 'login']);
 // Public Taxonomy & Job Routes
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/technologies', [TechnologyController::class, 'index']);
+Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']); 
 
 // Protected Routes (Require Login)
@@ -41,6 +43,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
+    // Application Routes (Candidate)
+    Route::post('/jobs/{job}/apply', [ApplicationController::class, 'store']);
+    Route::get('/candidate/applications', [ApplicationController::class, 'candidateApplications']);
+    Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
+
     // Employer-only routes
     Route::get('employer/dashboard', [EmployerController::class, 'dashboard'])->middleware('role:employer');
 
@@ -50,5 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/jobs', [JobController::class, 'store']); 
         Route::put('/jobs/{job}', [JobController::class, 'update']); 
         Route::delete('/jobs/{job}', [JobController::class, 'destroy']);
+        
+        // Employer Application Management
+        Route::get('/employer/jobs/{job}/applications', [ApplicationController::class, 'employerApplications']);
+        Route::put('/applications/{application}/status', [ApplicationController::class, 'updateStatus']);
     });
 });

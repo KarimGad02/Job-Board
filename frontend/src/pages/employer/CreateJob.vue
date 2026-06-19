@@ -26,6 +26,10 @@
         <label class="block font-medium">Responsibilities</label>
         <textarea v-model="form.responsibilities" rows="3" class="w-full border rounded p-2"></textarea>
       </div>
+      <div>
+        <label class="block font-medium">Required Skills & Qualifications</label>
+        <textarea v-model="form.skills_and_qualifications" rows="3" class="w-full border rounded p-2"></textarea>
+      </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
@@ -57,24 +61,10 @@
         </div>
       </div>
 
-      <!-- Technologies (Checkboxes) -->
-<div>
-  <label class="block font-medium mb-2">Required Technologies</label>
-  <div class="flex flex-wrap gap-4 border p-3 rounded min-h-[50px] items-center">
-    
-    <!-- Show this if the API fails to load data -->
-    <span v-if="technologies.length === 0" class="text-red-500 text-sm italic">
-      Waiting for database connection to load technologies...
-    </span>
-
-    <!-- Show checkboxes when data successfully loads -->
-    <label v-else v-for="tech in technologies" :key="tech.id" class="flex items-center space-x-2">
-      <input type="checkbox" :value="tech.id" v-model="form.technologies" />
-      <span>{{ tech.name }}</span>
-    </label>
-    
-  </div>
-</div>
+      <div>
+        <label class="block font-medium">Company Logo (Optional)</label>
+        <input type="file" @change="handleFileUpload" accept="image/*" class="w-full border rounded p-2" />
+      </div>
 
       <div>
         <label class="block font-medium">Job Status</label>
@@ -94,46 +84,58 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '../../services/api';
 
 const categories = ref([]);
-const technologies = ref([]);
+const router = useRouter();
 
 const form = ref({
   title: '',
   category_id: '',
   description: '',
   responsibilities: '',
+  skills_and_qualifications: '',
   work_type: 'onsite',
   location: '',
   salary_range: '',
   benefits: '',
   application_deadline: '',
   status: 'open',
-  technologies: []
+  company_logo: null
 });
 
-// Fetch categories and technologies when the page loads
+// Fetch categories when the page loads
 onMounted(async () => {
   try {
-    const [catResponse, techResponse] = await Promise.all([
-      api.get('/categories'),
-      api.get('/technologies')
-    ]);
+    const catResponse = await api.get('/categories');
     categories.value = catResponse.data;
-    technologies.value = techResponse.data;
   } catch (error) {
     console.error('Error fetching taxonomy data:', error);
   }
 });
 
+const handleFileUpload = (event) => {
+  form.value.company_logo = event.target.files[0];
+};
+
 // Submit the form
 const submitJob = async () => {
   try {
-    await api.post('/jobs', form.value);
+    const formData = new FormData();
+    for (const key in form.value) {
+      if (form.value[key] !== null && form.value[key] !== '') {
+        formData.append(key, form.value[key]);
+      }
+    }
+
+    await api.post('/jobs', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     alert('Job created successfully!');
-    // Here you would typically route the user back to the dashboard
-    // router.push('/employer/jobs');
+    router.push('/employer/jobs');
   } catch (error) {
     console.error('Error creating job:', error.response?.data || error);
     alert('Failed to create job. Check console for details.');
