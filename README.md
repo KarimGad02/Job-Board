@@ -53,49 +53,49 @@ Below is the planned distribution of tasks and the current status of features to
 - [x] Employer Dashboard
 - [x] Job Details page (Employer view)
 
-### 3. Admin, Payments & Platform Ops — @Shaker (Future Work)
+### 3. Admin, Payments & Platform Ops — @Shaker (Completed)
 **Backend:**
-- [ ] Admin dashboard APIs
-- [ ] Job approval/rejection workflow
-- [ ] Job status management
-- [ ] Payment integration (Stripe/PayPal)
-- [ ] Analytics endpoints
-- [ ] Comment moderation APIs
+- [x] Admin dashboard APIs
+- [x] Job approval/rejection workflow
+- [x] Job status management
+- [x] Payment integration (Stripe/PayPal)
+- [x] Analytics endpoints
+- [x] Comment moderation APIs
 
 **Frontend:**
-- [ ] Admin Dashboard
-- [ ] Job Approval Queue
-- [ ] Admin Job Management pages
-- [ ] Payment pages
-- [ ] Analytics views
+- [x] Admin Dashboard
+- [x] Job Approval Queue
+- [x] Admin Job Management pages
+- [x] Payment pages
+- [x] Analytics views
 
-### 4. Applications & Resumes — @ziad (Future Work)
+### 4. Applications & Resumes — @ziad (Completed)
 **Backend:**
-- [ ] Application APIs
-- [ ] Apply to Job endpoint
-- [ ] Cancel Application endpoint
-- [ ] Resume upload handling
-- [ ] Application status management
-- [ ] Accept/Reject candidate endpoints
+- [x] Application APIs
+- [x] Apply to Job endpoint
+- [x] Cancel Application endpoint
+- [x] Resume upload handling
+- [x] Application status management
+- [x] Accept/Reject candidate endpoints
 
 **Frontend:**
-- [ ] Candidate Dashboard
-- [ ] Applications page
-- [ ] Resume upload UI
-- [ ] Apply button and application forms
-- [ ] Application status tracking pages
+- [x] Candidate Dashboard
+- [x] Applications page
+- [x] Resume upload UI
+- [x] Apply button and application forms
+- [x] Application status tracking pages
 
-### 5. Public Job Board & Search — @MahmoudAli (Future Work)
+### 5. Public Job Board & Search — @MahmoudAli (Completed)
 **Backend:**
-- [ ] Search APIs
-- [ ] Filtering & Pagination logic
-- [ ] Sorting logic
-- [ ] Comments APIs
+- [x] Search APIs
+- [x] Filtering & Pagination logic
+- [x] Sorting logic
+- [x] Comments APIs
 
 **Frontend:**
-- [ ] Public Home Page
-- [ ] Job Listing page
-- [ ] Public Job Details page
-- [ ] Search, Filters, Pagination, and Sorting UI
-- [ ] Comments section
-- [ ] Responsive/mobile design & Candidate-facing UX improvements
+- [x] Public Home Page
+- [x] Job Listing page
+- [x] Public Job Details page
+- [x] Search, Filters, Pagination, and Sorting UI
+- [x] Comments section
+- [x] Responsive/mobile design & Candidate-facing UX improvements

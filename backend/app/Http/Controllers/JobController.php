@@ -8,13 +8,48 @@ use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
-    // Public: Get all open jobs
-    public function index()
+    // Public: Get all open jobs (with search, filters, sorting, and pagination)
+    public function index(Request $request)
     {
-        $jobs = Job::where('status', 'open')
-            ->with(['category', 'employer'])
-            ->latest()
-            ->get();
+        $query = Job::where('status', 'open')
+            ->with(['category', 'employer']);
+
+        // 1. Search by Keyword (title/description)
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // 2. Filter by Category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // 3. Filter by Work Type (remote, onsite, hybrid)
+        if ($request->filled('work_type')) {
+            $query->where('work_type', $request->input('work_type'));
+        }
+
+        // 4. Filter by Location
+        if ($request->filled('location')) {
+            $query->where('location', 'like', "%{$request->input('location')}%");
+        }
+
+        // 5. Sorting
+        $sort = $request->input('sort', 'latest');
+        if ($sort === 'oldest') {
+            $query->oldest();
+        } else {
+            $query->latest();
+        }
+
+        // 6. Pagination
+        $perPage = $request->input('per_page', 9);
+        $jobs = $query->paginate($perPage);
+
         return response()->json($jobs);
     }
 

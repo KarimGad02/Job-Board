@@ -1,19 +1,23 @@
 <template>
-  <div>
-    <h2>Edit Profile</h2>
-    <form @submit.prevent="submit">
-      <div>
-        <label>Name:</label>
-        <input v-model="form.name" placeholder="name" />
-      </div>
-      <div>
-        <label>Avatar URL:</label>
-        <input v-model="form.avatar" placeholder="avatar url" />
-      </div>
-      <button type="submit">Save</button>
-      <router-link to="/profile" style="margin-left: 10px;">Back to Profile</router-link>
-    </form>
-    <div v-if="message" style="margin-top: 10px; color: green;">{{ message }}</div>
+  <div class="profile-page-container">
+    <div class="profile-card">
+      <h2>Edit Profile</h2>
+      <form @submit.prevent="submit" class="auth-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input v-model="form.name" placeholder="Enter your full name" required />
+        </div>
+        <div class="form-group">
+          <label>Avatar URL</label>
+          <input v-model="form.avatar" placeholder="Paste avatar image link (optional)" />
+        </div>
+        <div class="profile-btn-group">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <router-link to="/profile" class="btn btn-secondary">Back to Profile</router-link>
+        </div>
+      </form>
+      <div v-if="message" class="success">{{ message }}</div>
+    </div>
   </div>
 </template>
 
@@ -59,9 +63,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-form div { margin: 10px 0; }
-input { padding: 5px; width: 300px; }
-button { padding: 8px 15px; }
-</style>

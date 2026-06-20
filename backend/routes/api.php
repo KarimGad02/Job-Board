@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TechnologyController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CommentController;
 
 
 // Public Auth Routes
@@ -24,6 +25,7 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/technologies', [TechnologyController::class, 'index']);
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']); 
+Route::get('/jobs/{job}/comments', [CommentController::class, 'index']);
 
 // Protected Routes (Require Login)
 Route::middleware('auth:sanctum')->group(function () {
@@ -31,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [ProfileController::class, 'show']);
     Route::put('profile', [ProfileController::class, 'update']);
     Route::post('/payment/create-intent', [PaymentController::class, 'createPaymentIntent']);
+    Route::post('/jobs/{job}/comments', [CommentController::class, 'store']);
     // Admin-only routes
     Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->middleware('role:admin');
     Route::get('admin/users', [AdminRoleController::class, 'index'])->middleware('role:admin');

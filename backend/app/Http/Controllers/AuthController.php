@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         $requestedRole = $data['role'] ?? 'candidate';
         $role = Role::firstWhere('name', $requestedRole);
-        
+
         if ($role) {
             $user->roles()->attach($role->id);
         }
@@ -40,19 +40,20 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+
         $data = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string'
-        ]);
+            ]);
 
-        $user = User::where('email', $data['email'])->first();
-        if (! $user || ! Hash::check($data['password'], $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+            $user = User::where('email', $data['email'])->first();
+            if (! $user || ! Hash::check($data['password'], $user->password)) {
+                return response()->json(['message' => 'Invalid credentials'], 401);
+                }
 
-        $token = $user->createToken('api-token')->plainTextToken;
+                $token = $user->createToken('api-token')->plainTextToken;
 
-        $user->load('roles');
+                $user->load('roles');
 
         return response()->json(['user' => $user, 'token' => $token]);
     }

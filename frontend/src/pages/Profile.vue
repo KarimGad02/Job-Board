@@ -1,21 +1,42 @@
 <template>
-  <div>
-    <h2>Profile</h2>
-    <div v-if="user">
-      <p><strong>Name:</strong> {{ user.name }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p v-if="user.roles && user.roles.length"><strong>Roles:</strong> {{ user.roles.map(r => r.name).join(', ') }}</p>
-      <div style="margin-top: 20px;">
-        <router-link to="/profile/edit" style="margin-right: 10px;">Edit Profile</router-link>
-        <button @click="logout">Logout</button>
+  <div class="profile-page-container">
+    <div class="profile-card">
+      <h2>My Profile</h2>
+      <div v-if="user" class="profile-content">
+        <div class="profile-avatar">
+          {{ user.name ? user.name.charAt(0).toUpperCase() : 'U' }}
+        </div>
+        <div class="profile-info">
+          <div class="info-group">
+            <span class="info-label">Full Name</span>
+            <span class="info-value">{{ user.name }}</span>
+          </div>
+          <div class="info-group">
+            <span class="info-label">Email Address</span>
+            <span class="info-value">{{ user.email }}</span>
+          </div>
+          <div class="info-group" v-if="user.roles && user.roles.length">
+            <span class="info-label">Account Role</span>
+            <span class="info-value text-capitalize">{{ user.roles.map(r => r.name).join(', ') }}</span>
+          </div>
+        </div>
+        
+        <div class="profile-btn-group">
+          <router-link to="/profile/edit" class="btn btn-secondary">Edit Profile</router-link>
+          <button @click="logout" class="btn btn-danger">Logout</button>
+        </div>
+      </div>
+      <div v-else class="jobs-loading">
+        <div class="spinner"></div>
+        <p>Loading profile details...</p>
       </div>
     </div>
-    <div v-else>Loading...</div>
   </div>
 </template>
 
 <script>
 import api from '../services/api'
+import { logoutUser } from '../services/auth'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -30,7 +51,6 @@ export default {
         router.push('/')
         return
       }
-      if (token) api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       try {
         const res = await api.get('/profile')
         user.value = res.data
@@ -43,20 +63,14 @@ export default {
     async function logout() {
       try {
         await api.post('/logout')
-        localStorage.removeItem('api_token')
-        delete api.defaults.headers.common['Authorization']
-        router.push('/')
       } catch (e) {
         console.error(e)
       }
+      logoutUser()
+      router.push('/login')
     }
 
     return { user, logout }
   }
 }
 </script>
-
-<style scoped>
-p { margin: 10px 0; }
-button { padding: 8px 15px; }
-</style>
